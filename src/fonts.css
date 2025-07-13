@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Hypatia Sans Pro';
+  src: url('./assets/fonts/Hypatia-Sans-Pro-Light.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src:
+    url('./assets/fonts/Barlow-Medium.ttf') format('truetype'),
+    url('./assets/fonts/Barlow-MediumItalic.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bebas Neue';
+  src: url('./assets/fonts/BebasNeue-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:
+    url('./assets/fonts/Roboto-Italic-VariableFont') format('truetype'),
+    url('./assets/fonts/Roboto-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
