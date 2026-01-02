@@ -7,7 +7,7 @@ import { AuroraBackground } from '@/components/ui/aurora-background';
 
 export default function App() {
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-violet-900/60 to-purple-900/40 text-slate-50">
+    <main className="min-h-screen w-full overflow-x-hidden bg-linear-to-br from-violet-900/60 to-purple-900/40 text-slate-50">
       <AuroraBackground>
         <div className="flex min-h-screen flex-col">
           {/* Header section - stays at top */}
@@ -29,7 +29,7 @@ export default function App() {
               {/* Grid layout for larger screens */}
               <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
                 <div className="flex justify-center lg:justify-end">
-                  <img src={eventInfo.albumCover} alt="album-cover" className="w-[26rem] rounded-sm drop-shadow-lg lg:w-[32rem]" />
+                  <img src={eventInfo.albumCover} alt="album-cover" className="w-104 rounded-sm drop-shadow-lg lg:w-lg" />
                 </div>
 
                 {/* Content column */}
