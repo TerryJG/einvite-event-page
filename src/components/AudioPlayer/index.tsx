@@ -14,11 +14,11 @@ type AudioPlayerProps = {
   repeatAudio?: boolean;
 };
 
-// Jotai atom for player visibility - can be accessed by other components
 export const playerVisibleAtom = atom(true);
+export const isPlayingAtom = atom(false);
 
 export function AudioPlayer({ audioSrc, albumCover, title, artist, defaultVolume = 0.5, repeatAudio = true }: AudioPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isRepeat, setIsRepeat] = useState(repeatAudio);
@@ -57,18 +57,13 @@ export function AudioPlayer({ audioSrc, albumCover, title, artist, defaultVolume
   // Fade out after 2 seconds of playing
   useEffect(() => {
     if (isPlaying) {
-      setIsVisible(true); // Show immediately when playing starts
+      setIsVisible(true);
       if (fadeTimeoutRef.current) {
         clearTimeout(fadeTimeoutRef.current);
       }
       fadeTimeoutRef.current = setTimeout(() => {
         setIsVisible(false);
       }, 2000);
-    } else {
-      setIsVisible(true); // Show when paused
-      if (fadeTimeoutRef.current) {
-        clearTimeout(fadeTimeoutRef.current);
-      }
     }
 
     return () => {
@@ -110,11 +105,7 @@ export function AudioPlayer({ audioSrc, albumCover, title, artist, defaultVolume
   };
 
   return (
-    <div
-      className={`mx-auto w-full rounded-md bg-purple-900/30 p-2 backdrop-blur-sm transition-opacity duration-500 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
-      }`}
-    >
+    <div className={`mx-auto w-full rounded-md bg-purple-900/30 p-2 backdrop-blur-sm transition-opacity duration-500 ${!isPlaying || isVisible ? 'opacity-100' : 'opacity-0'}`}>
       <audio ref={audioRef} src={audioSrc} />
       {/* Mini Player Layout */}
       <div className="flex items-center space-x-3">

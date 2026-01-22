@@ -2,16 +2,27 @@ import { Logo } from '@/components/Logo';
 import { EventTitle } from '@/components/EventTitle';
 import { eventInfo } from '@/constants/eventInfo';
 import { Space } from '@/components/Space';
-import { AudioPlayer, playerVisibleAtom } from '@/components/AudioPlayer';
+import { AudioPlayer, playerVisibleAtom, isPlayingAtom } from '@/components/AudioPlayer';
 import { AuroraBackground } from '@/components/ui/aurora-background';
 import { motion } from 'motion/react';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 export default function App() {
   const [playerVisible, setPlayerVisible] = useAtom(playerVisibleAtom);
+  const isPlaying = useAtomValue(isPlayingAtom);
 
   const handleTap = () => {
     setPlayerVisible(!playerVisible);
+  };
+
+  const handleHoverStart = () => {
+    setPlayerVisible(true);
+  };
+
+  const handleHoverEnd = () => {
+    if (isPlaying) {
+      setPlayerVisible(false);
+    }
   };
 
   return (
@@ -35,13 +46,8 @@ export default function App() {
               {/* Grid layout for larger screens */}
               <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:items-center lg:gap-8">
                 <div className="flex justify-center lg:justify-end">
-                  <motion.div
-                    className="relative"
-                    onHoverStart={() => setPlayerVisible(true)}
-                    onHoverEnd={() => setPlayerVisible(false)}
-                    onTap={handleTap}
-                  >
-                    <img src={eventInfo.albumCover} alt="album-cover" className="w-104 rounded-sm drop-shadow-lg lg:w-lg" />
+                  <motion.div className="relative" onHoverStart={handleHoverStart} onHoverEnd={handleHoverEnd} onTap={handleTap}>
+                    <img src={eventInfo.albumCover} alt="album-cover" className="w-104 rounded-sm opacity-90 drop-shadow-lg lg:w-lg" />
                     <div className="absolute right-4 bottom-4 left-4">
                       <AudioPlayer audioSrc="god-our-only-hope.mp3" repeatAudio={true} />
                     </div>
