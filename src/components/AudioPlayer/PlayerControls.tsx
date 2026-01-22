@@ -34,7 +34,7 @@ export function PlayerControls({ isPlaying, currentTime, duration, isRepeat, onT
           onValueChange={onSeek}
           max={duration || 100}
           step={0.1}
-          className="cursor-pointer **:data-[slot=slider-range]:bg-violet-500 **:data-[slot=slider-thumb]:size-3 **:data-[slot=slider-thumb]:border-violet-500 **:data-[slot=slider-thumb]:bg-violet-500 **:data-[slot=slider-thumb]:hover:ring-violet-500/50 **:data-[slot=slider-track]:bg-slate-600"
+          className="cursor-pointer **:data-[slot=slider-range]:bg-violet-500 **:data-[slot=slider-thumb]:size-3 **:data-[slot=slider-thumb]:border-violet-500 **:data-[slot=slider-thumb]:bg-violet-500 **:data-[slot=slider-thumb]:hover:ring-violet-500/50 **:data-[slot=slider-track]:bg-slate-300/50"
         />
       </div>
 

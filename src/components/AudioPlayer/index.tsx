@@ -1,24 +1,30 @@
 import { eventInfo } from '@/constants/eventInfo';
 import { useState, useRef, useEffect } from 'react';
+import { atom, useAtom } from 'jotai';
 import { AlbumCover } from './AlbumCover';
 import { TrackInfo } from './TrackInfo';
 import { PlayerControls } from './PlayerControls';
 
 type AudioPlayerProps = {
   audioSrc: string;
-  albumCover: string;
-  title: string;
-  artist: string;
+  albumCover?: string;
+  title?: string;
+  artist?: string;
   defaultVolume?: number;
   repeatAudio?: boolean;
 };
+
+// Jotai atom for player visibility - can be accessed by other components
+export const playerVisibleAtom = atom(true);
 
 export function AudioPlayer({ audioSrc, albumCover, title, artist, defaultVolume = 0.5, repeatAudio = true }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isRepeat, setIsRepeat] = useState(repeatAudio);
+  const [isVisible, setIsVisible] = useAtom(playerVisibleAtom);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -47,6 +53,30 @@ export function AudioPlayer({ audioSrc, albumCover, title, artist, defaultVolume
       audio.removeEventListener('ended', handleEnded);
     };
   }, [isRepeat, defaultVolume]);
+
+  // Fade out after 2 seconds of playing
+  useEffect(() => {
+    if (isPlaying) {
+      setIsVisible(true); // Show immediately when playing starts
+      if (fadeTimeoutRef.current) {
+        clearTimeout(fadeTimeoutRef.current);
+      }
+      fadeTimeoutRef.current = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+    } else {
+      setIsVisible(true); // Show when paused
+      if (fadeTimeoutRef.current) {
+        clearTimeout(fadeTimeoutRef.current);
+      }
+    }
+
+    return () => {
+      if (fadeTimeoutRef.current) {
+        clearTimeout(fadeTimeoutRef.current);
+      }
+    };
+  }, [isPlaying]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -80,13 +110,17 @@ export function AudioPlayer({ audioSrc, albumCover, title, artist, defaultVolume
   };
 
   return (
-    <div className="mx-auto w-full rounded-md bg-purple-900/30 p-2 backdrop-blur-sm">
+    <div
+      className={`mx-auto w-full rounded-md bg-purple-900/30 p-2 backdrop-blur-sm transition-opacity duration-500 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
       <audio ref={audioRef} src={audioSrc} />
       {/* Mini Player Layout */}
       <div className="flex items-center space-x-3">
-        <AlbumCover albumCover={albumCover} />
+        {albumCover && <AlbumCover albumCover={albumCover} />}
         <div className="min-w-0 flex-1">
-          <TrackInfo title={title} artist={artist} />
+          {title && artist && <TrackInfo title={title} artist={artist} />}
           <PlayerControls
             isPlaying={isPlaying}
             currentTime={currentTime}

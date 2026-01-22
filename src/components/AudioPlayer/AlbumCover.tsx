@@ -1,5 +1,5 @@
 type AlbumCoverProps = {
-  albumCover: string;
+  albumCover: string | undefined;
 };
 
 export function AlbumCover({ albumCover }: AlbumCoverProps) {
